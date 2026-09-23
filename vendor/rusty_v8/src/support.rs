@@ -1,6 +1,5 @@
 use std::any::type_name;
 use std::any::Any;
-use std::any::TypeId;
 use std::borrow::Borrow;
 use std::borrow::BorrowMut;
 use std::convert::identity;
