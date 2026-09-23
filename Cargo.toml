@@ -26,3 +26,12 @@ reqwest = { version = "0.11", features = ["blocking"] }
 unicode-width = "0.1.8"
 rusty_v8 = "0.22.1"
 crossbeam-channel = "0.5.1"
+
+# NOTE (puppy): `rusty_v8 0.22.1` assumes that `std::any::TypeId` is 8 bytes long
+# (`TypeIdHasher::write_u64` asserts `size_of::<TypeId>() == size_of::<u64>()`),
+# but `TypeId` is a 128-bit value since Rust 1.72, which makes the assertion fail
+# at runtime with `left: 16, right: 8`. We therefore vendor a minimally patched
+# copy of the crate under `vendor/rusty_v8` that drops the invalid assumption.
+# See `vendor/rusty_v8/PATCH.md` for more details.
+[patch.crates-io]
+rusty_v8 = { path = "vendor/rusty_v8" }
