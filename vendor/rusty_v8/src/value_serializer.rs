@@ -285,7 +285,7 @@ impl<'a, 's> ValueSerializerHeap<'a, 's> {
   /// Starting from 'this' pointer a ValueSerializerHeap ref can be created
   pub unsafe fn dispatch(
     value_serializer_delegate: &'s CxxValueSerializerDelegate,
-  ) -> &Self {
+  ) -> &'s Self {
     Self::get_cxx_value_serializer_delegate_offset()
       .to_embedder::<Self>(value_serializer_delegate)
   }
@@ -294,7 +294,7 @@ impl<'a, 's> ValueSerializerHeap<'a, 's> {
   /// created
   pub unsafe fn dispatch_mut(
     value_serializer_delegate: &'s mut CxxValueSerializerDelegate,
-  ) -> &mut Self {
+  ) -> &'s mut Self {
     Self::get_cxx_value_serializer_delegate_offset()
       .to_embedder_mut::<Self>(value_serializer_delegate)
   }

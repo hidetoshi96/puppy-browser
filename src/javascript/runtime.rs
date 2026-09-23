@@ -133,7 +133,7 @@ impl JavaScriptRuntime {
     }
 
     /// `get_handle_scope` returns [a handle scope](https://v8docs.nodesource.com/node-0.8/d3/d95/classv8_1_1_handle_scope.html) for the runtime.
-    pub fn get_handle_scope(&mut self) -> v8::HandleScope {
+    pub fn get_handle_scope(&mut self) -> v8::HandleScope<'_> {
         let context = self.get_context();
         v8::HandleScope::with_context(&mut self.v8_isolate, context)
     }

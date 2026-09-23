@@ -130,7 +130,7 @@ impl Source {
     }
   }
 
-  pub fn get_cached_data(&self) -> &CachedData {
+  pub fn get_cached_data(&self) -> &CachedData<'_> {
     unsafe { &*v8__ScriptCompiler__Source__GetCachedData(self) }
   }
 }

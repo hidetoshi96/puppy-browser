@@ -230,7 +230,7 @@ impl Module {
   }
 
   /// For a module in kErrored status, this returns the corresponding exception.
-  pub fn get_exception(&self) -> Local<Value> {
+  pub fn get_exception(&self) -> Local<'_, Value> {
     // Note: the returned value is not actually stored in a HandleScope,
     // therefore we don't need a scope object here.
     unsafe { Local::from_raw(v8__Module__GetException(self)) }.unwrap()
@@ -253,7 +253,7 @@ impl Module {
     since = "0.18.2",
     note = "Use Module::get_module_requests() and ModuleRequest::get_specifier()."
   )]
-  pub fn get_module_request(&self, i: usize) -> Local<String> {
+  pub fn get_module_request(&self, i: usize) -> Local<'_, String> {
     // Note: the returned value is not actually stored in a HandleScope,
     // therefore we don't need a scope object here.
     unsafe {
@@ -263,7 +263,7 @@ impl Module {
   }
 
   /// Returns the ModuleRequests for this module.
-  pub fn get_module_requests(&self) -> Local<FixedArray> {
+  pub fn get_module_requests(&self) -> Local<'_, FixedArray> {
     unsafe { Local::from_raw(v8__Module__GetModuleRequests(self)) }.unwrap()
   }
 
@@ -319,7 +319,7 @@ impl Module {
   /// Returns the namespace object of this module.
   ///
   /// The module's status must be at least kInstantiated.
-  pub fn get_module_namespace(&self) -> Local<Value> {
+  pub fn get_module_namespace(&self) -> Local<'_, Value> {
     // Note: the returned value is not actually stored in a HandleScope,
     // therefore we don't need a scope object here.
     unsafe { Local::from_raw(v8__Module__GetModuleNamespace(self)).unwrap() }
@@ -447,7 +447,7 @@ impl Hash for Module {
 
 impl ModuleRequest {
   /// Returns the module specifier for this ModuleRequest.
-  pub fn get_specifier(&self) -> Local<String> {
+  pub fn get_specifier(&self) -> Local<'_, String> {
     unsafe { Local::from_raw(v8__ModuleRequest__GetSpecifier(self)) }.unwrap()
   }
 
@@ -469,7 +469,7 @@ impl ModuleRequest {
   /// hosts are expected to ignore assertions that they do not support (as
   /// opposed to, for example, triggering an error if an unsupported assertion is
   /// present).
-  pub fn get_import_assertions(&self) -> Local<FixedArray> {
+  pub fn get_import_assertions(&self) -> Local<'_, FixedArray> {
     unsafe { Local::from_raw(v8__ModuleRequest__GetImportAssertions(self)) }
       .unwrap()
   }

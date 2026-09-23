@@ -16,7 +16,7 @@ use crate::{
     },
     window::Window,
 };
-use log::{error, info};
+use log::info;
 use thiserror::Error;
 
 use super::PAGE_VIEW_NAME;

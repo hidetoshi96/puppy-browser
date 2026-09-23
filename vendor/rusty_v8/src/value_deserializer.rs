@@ -222,7 +222,7 @@ impl<'a, 's> ValueDeserializerHeap<'a, 's> {
   /// Starting from 'this' pointer a ValueDeserializerHeap ref can be created
   pub unsafe fn dispatch(
     value_serializer_delegate: &'s CxxValueDeserializerDelegate,
-  ) -> &Self {
+  ) -> &'s Self {
     Self::get_cxx_value_deserializer_delegate_offset()
       .to_embedder::<Self>(value_serializer_delegate)
   }
@@ -231,7 +231,7 @@ impl<'a, 's> ValueDeserializerHeap<'a, 's> {
   /// created
   pub unsafe fn dispatch_mut(
     value_serializer_delegate: &'s mut CxxValueDeserializerDelegate,
-  ) -> &mut Self {
+  ) -> &'s mut Self {
     Self::get_cxx_value_deserializer_delegate_offset()
       .to_embedder_mut::<Self>(value_serializer_delegate)
   }

@@ -1,7 +1,7 @@
 //! This module includes some implementations on Fetch.
 
 use crate::url::{ParseError, Url};
-use log::{error, info};
+use log::info;
 use num_derive::{self, FromPrimitive};
 use reqwest;
 use std::fs;

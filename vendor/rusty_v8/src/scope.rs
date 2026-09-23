@@ -1023,7 +1023,7 @@ pub(crate) mod data {
     /// This function should be called only when an Isolate is being disposed.
     pub(crate) fn drop_root(isolate: &mut Isolate) {
       let root = Self::get_root_mut(isolate);
-      unsafe { Box::from_raw(root) };
+      unsafe { drop(Box::from_raw(root)) };
       isolate.set_current_scope_data(None);
     }
 
@@ -1538,10 +1538,11 @@ mod raw {
     /// This function is marked unsafe because the caller must ensure that the
     /// returned value isn't dropped before `init()` has been called.
     pub unsafe fn uninit() -> Self {
-      // This is safe because there is no combination of bits that would produce
-      // an invalid `[usize; 3]`.
-      #[allow(clippy::uninit_assumed_init)]
-      Self(MaybeUninit::uninit().assume_init())
+      // NOTE (puppy patch): zero-initialize instead of
+      // `MaybeUninit::uninit().assume_init()`, which newer rustc rejects as
+      // undefined behavior (`invalid_value`: integers must be initialized).
+      // The contents are irrelevant: `init()` overwrites them before any read.
+      Self([0; 3])
     }
 
     /// This function is marked unsafe because `init()` must be called exactly
@@ -1597,10 +1598,11 @@ mod raw {
     /// This function is marked unsafe because the caller must ensure that the
     /// returned value isn't dropped before `init()` has been called.
     pub unsafe fn uninit() -> Self {
-      // This is safe because there is no combination of bits that would produce
-      // an invalid `[usize; 6]`.
-      #[allow(clippy::uninit_assumed_init)]
-      Self(MaybeUninit::uninit().assume_init())
+      // NOTE (puppy patch): zero-initialize instead of
+      // `MaybeUninit::uninit().assume_init()`, which newer rustc rejects as
+      // undefined behavior (`invalid_value`: integers must be initialized).
+      // The contents are irrelevant: `init()` overwrites them before any read.
+      Self([0; 6])
     }
 
     /// This function is marked unsafe because `init()` must be called exactly

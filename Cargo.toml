@@ -20,7 +20,7 @@ combine = "4.5.2"
 cursive = { git = "https://github.com/gyscos/cursive" }
 cursive-aligned-view = "0.4.0"
 num-traits = "0.2"
-num-derive = "0.3"
+num-derive = "0.4"
 url = "2.2.1"
 reqwest = { version = "0.11", features = ["blocking"] }
 unicode-width = "0.1.8"

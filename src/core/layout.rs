@@ -28,6 +28,9 @@ pub enum BoxType {
 #[derive(Debug)]
 pub struct BoxProps<'a> {
     pub node_type: &'a NodeType,
+    // NOTE (puppy patch): the computed properties are carried here for future
+    // layout work, but nothing reads them yet, hence the `dead_code` allowance.
+    #[allow(dead_code)]
     pub properties: PropertyMap,
 }
 

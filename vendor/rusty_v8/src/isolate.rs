@@ -367,7 +367,10 @@ impl Isolate {
   fn get_annex_arc(&self) -> Arc<IsolateAnnex> {
     let annex_ptr = self.get_annex();
     let annex_arc = unsafe { Arc::from_raw(annex_ptr) };
-    Arc::into_raw(annex_arc.clone());
+    // NOTE (puppy patch): `into_raw()` intentionally leaks the reference count
+    // bumped by `clone()`; bind the discarded pointer to `_` to satisfy the
+    // `unused_must_use` lint.
+    let _ = Arc::into_raw(annex_arc.clone());
     annex_arc
   }
 
@@ -415,14 +418,14 @@ impl Isolate {
   /// Get a reference to embedder data added with `set_slot()`.
   pub fn get_slot<T: 'static>(&self) -> Option<&T> {
     let b = self.get_annex().slots.get(&TypeId::of::<T>())?;
-    let r = Any::downcast_ref::<T>(&**b).unwrap();
+    let r = <dyn Any>::downcast_ref::<T>(&**b).unwrap();
     Some(r)
   }
 
   /// Get a mutable reference to embedder data added with `set_slot()`.
   pub fn get_slot_mut<T: 'static>(&mut self) -> Option<&mut T> {
     let b = self.get_annex_mut().slots.get_mut(&TypeId::of::<T>())?;
-    let r = Any::downcast_mut::<T>(&mut **b).unwrap();
+    let r = <dyn Any>::downcast_mut::<T>(&mut **b).unwrap();
     Some(r)
   }
 
