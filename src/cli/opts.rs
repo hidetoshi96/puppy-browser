@@ -1,28 +1,29 @@
 //! This module defines options of `puppy` command.
 
 use super::subcommand::*;
+use clap::{Args, Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
-use structopt::StructOpt;
 
-#[derive(StructOpt, Debug)]
+#[derive(Parser, Debug)]
 pub struct Opts {
-    #[structopt(flatten)]
+    #[command(flatten)]
     pub common_opts: CommonOpts,
 
-    #[structopt(subcommand)]
+    #[command(subcommand)]
     pub sub_command: SubCommand,
 }
 
-#[derive(StructOpt, Debug)]
+#[derive(Args, Debug)]
 pub struct CommonOpts {
-    #[structopt(flatten)]
+    #[command(flatten)]
     pub verbose: Verbosity,
 }
 
-#[derive(StructOpt, Debug)]
+#[derive(Subcommand, Debug)]
 pub enum SubCommand {
     Open(open::Opts),
+    #[command(subcommand)]
     Completion(completion::Opts),
-    #[structopt(name = "js")]
+    #[command(name = "js")]
     JavaScript,
 }

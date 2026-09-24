@@ -1,0 +1,60 @@
+[package]
+authors = ["Alexandre Bury <alexandre.bury@gmail.com>"]
+categories = ["command-line-interface", "gui"]
+description = "Core components for the Cursive TUI"
+documentation = "https://docs.rs/cursive"
+keywords = ["ncurses", "TUI", "UI"]
+license = "MIT"
+name = "cursive_core"
+readme = "Readme.md"
+repository = "https://github.com/gyscos/cursive"
+version = "0.2.2"
+edition = "2018"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[badges.travis-ci]
+repository = "gyscos/cursive"
+
+[badges.appveyor]
+repository = "gyscos/cursive"
+
+[dependencies]
+enum-map = "1.0"
+enumset = "1.0.4"
+log = "0.4"
+owning_ref = { package = "safer_owning_ref", version = "0.5" }
+unicode-segmentation = "1"
+unicode-width = "0.1"
+xi-unicode = "0.3"
+crossbeam-channel = "0.5"
+lazy_static = "1"
+# NOTE (puppy): `chrono`'s default features pull `wasm-bindgen` (and thus
+# `bumpalo` / `rand` / `js-sys`) for the `wasm32` target via `wasmbind`,
+# plus `iana-time-zone`. `cursive-core` only uses `chrono::DateTime`,
+# `chrono::Utc`, and `chrono::Local` in its debug logger view, so restrict
+# to the `clock` + `std` features (same set puppy itself enables).
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+ahash = "0.7"
+
+[dependencies.toml]
+optional = true
+version = "0.5"
+
+[dependencies.num]
+default-features = false
+version = "0.4"
+
+[dependencies.pulldown-cmark]
+default-features = false
+optional = true
+version = "0.8"
+
+[features]
+doc-cfg = []
+markdown = ["pulldown-cmark"]
+unstable_scroll = []  # Deprecated feature, remove in next version
+
+[lib]
+name = "cursive_core"

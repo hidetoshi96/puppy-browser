@@ -12,17 +12,33 @@ bench = false
 [dependencies]
 log = "0.4"
 fern = "0.5"
-chrono = "0.4"
-clap-verbosity-flag = "0.3.1"
-structopt = "0.3.21"
+# NOTE (puppy): `chrono`'s default features (`wasmbind`, which pulls `wasm-bindgen`
+# for the `wasm32` target and thus transitively `bumpalo`, plus `iana-time-zone`)
+# are not needed here: puppy only uses `chrono::Local` in its CLI logger.
+# Disabling them keeps those crates out of puppy's own dependency subtree
+# (the same set is enabled for the vendored `cursive-core`; see
+# `vendor/cursive/PATCH.md`).
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+clap = { version = "4", features = ["derive"] }
+clap_complete = "4"
+clap-verbosity-flag = "3"
 thiserror = "1.0"
 combine = "4.5.2"
-cursive = { git = "https://github.com/gyscos/cursive" }
-cursive-aligned-view = "0.4.0"
+# NOTE (puppy): `cursive` defaults to the `ncurses-backend` feature, which depends on
+# the unmaintained (and unfixable, see RUSTSEC-2019-0006 / RUSTSEC-2025-0108) `ncurses`
+# crate. We use the `termion-backend` feature instead, which also drops the unmaintained
+# `term_size` dependency (ncurses) as well as `crossterm` 0.19 and its dependencies
+# (`mio` 0.7 and `instant`, which are unmaintained/vulnerable per RUSTSEC-2024-0019
+# and RUSTSEC-2024-0384).
+# We also vendor the crate (under `vendor/`) so that its `cursive-core` dependency on
+# the unsound and unmaintained `owning_ref` (RUSTSEC-2022-0040, no patched release
+# exists) can be redirected to the fixed fork `safer_owning_ref`.
+# See `vendor/cursive/PATCH.md` for more details.
+cursive = { path = "vendor/cursive", default-features = false, features = ["termion-backend"] }
 num-traits = "0.2"
 num-derive = "0.4"
-url = "2.2.1"
-reqwest = { version = "0.11", features = ["blocking"] }
+url = "2.5"
+reqwest = { version = "0.12", features = ["blocking"] }
 unicode-width = "0.1.8"
 rusty_v8 = "0.22.1"
 crossbeam-channel = "0.5.1"

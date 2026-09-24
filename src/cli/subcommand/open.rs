@@ -8,10 +8,10 @@ use crate::{
     util,
 };
 
-use structopt::StructOpt;
+use clap::Args;
 
 /// `Opts` defines options for the `open` subcommand.
-#[derive(StructOpt, Debug)]
+#[derive(Args, Debug)]
 pub struct Opts {
     pub url: Option<String>,
 }

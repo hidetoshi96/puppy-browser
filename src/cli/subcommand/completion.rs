@@ -1,13 +1,14 @@
 //! This module defines `completion` subcommand.
 
 use std::io;
-use structopt::clap::Shell;
-use structopt::StructOpt;
+
+use clap::{CommandFactory, Subcommand};
+use clap_complete::{generate, Shell};
 
 use crate::cli::CommonOpts;
 
 /// `Opts` defines possible options for the `completion` subcommand.
-#[derive(StructOpt, Debug)]
+#[derive(Subcommand, Debug)]
 pub enum Opts {
     Zsh,
     Bash,
@@ -16,15 +17,17 @@ pub enum Opts {
 
 /// `run` emits a completion script for some shell environments.
 pub fn run(_common_opts: CommonOpts, opts: Opts) -> i32 {
-    match opts {
-        Opts::Bash => completion(Shell::Bash),
-        Opts::Zsh => completion(Shell::Zsh),
-        Opts::Fish => completion(Shell::Fish),
+    let shell = match opts {
+        Opts::Bash => Shell::Bash,
+        Opts::Zsh => Shell::Zsh,
+        Opts::Fish => Shell::Fish,
     };
+    completion(shell);
 
     return 0;
 }
 
 fn completion(s: Shell) {
-    super::super::Opts::clap().gen_completions_to(env!("CARGO_PKG_NAME"), s, &mut io::stdout())
+    let mut app = super::super::Opts::command();
+    generate(s, &mut app, env!("CARGO_PKG_NAME"), &mut io::stdout())
 }
